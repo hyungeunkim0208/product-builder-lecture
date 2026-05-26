@@ -1,6 +1,28 @@
 const generateBtn = document.getElementById('generate-btn');
 const numbersContainer = document.getElementById('numbers');
+const themeBtn = document.getElementById('theme-btn');
+const body = document.body;
 
+// Theme Toggle Logic
+const currentTheme = localStorage.getItem('theme');
+if (currentTheme === 'dark') {
+    body.classList.add('dark-mode');
+    themeBtn.textContent = 'Light Mode';
+}
+
+themeBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    let theme = 'light';
+    if (body.classList.contains('dark-mode')) {
+        theme = 'dark';
+        themeBtn.textContent = 'Light Mode';
+    } else {
+        themeBtn.textContent = 'Dark Mode';
+    }
+    localStorage.setItem('theme', theme);
+});
+
+// Lotto Number Generation Logic
 generateBtn.addEventListener('click', () => {
     numbersContainer.innerHTML = '';
     const numbers = new Set();
