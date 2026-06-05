@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- <html lang="en"> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,27 +15,16 @@
         <h1>Animal Face Test</h1>
         <p class="subtitle">Am I a Dog or a Cat?</p>
 
-        <div class="tab-container">
-            <button id="tab-upload" class="tab-btn active">Upload Photo</button>
-            <button id="tab-webcam" class="tab-btn">Use Webcam</button>
-        </div>
-        
         <!-- Upload Section -->
         <div id="upload-section">
             <div id="upload-area" class="upload-area">
                 <input type="file" id="image-input" accept="image/*" hidden>
                 <label for="image-input" class="upload-label">
-                    <div class="upload-icon">📸</div>
+                    <div class="upload-icon">📂</div>
                     <span>Click or Drag to Upload Photo</span>
                 </label>
                 <img id="preview-image" src="#" alt="Preview" style="display: none;">
             </div>
-        </div>
-
-        <!-- Webcam Section -->
-        <div id="webcam-section" style="display: none;">
-            <div id="webcam-container"></div>
-            <button id="webcam-start-btn">Start Webcam</button>
         </div>
 
         <div id="loading" class="loading" style="display: none;">

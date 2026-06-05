@@ -8,15 +8,8 @@ const restartBtn = document.getElementById('restart-btn');
 const themeBtn = document.getElementById('theme-btn');
 const body = document.body;
 
-const tabUpload = document.getElementById('tab-upload');
-const tabWebcam = document.getElementById('tab-webcam');
-const uploadSection = document.getElementById('upload-section');
-const webcamSection = document.getElementById('webcam-section');
-const webcamStartBtn = document.getElementById('webcam-start-btn');
-const webcamContainer = document.getElementById('webcam-container');
-
 const URL = "https://teachablemachine.withgoogle.com/models/CkLRrk1yA/";
-let model, maxPredictions, webcam, animationId;
+let model, maxPredictions;
 
 // Theme Toggle Logic
 const currentTheme = localStorage.getItem('theme');
@@ -37,23 +30,6 @@ themeBtn.addEventListener('click', () => {
     localStorage.setItem('theme', theme);
 });
 
-// Tab Switching Logic
-tabUpload.addEventListener('click', () => {
-    tabUpload.classList.add('active');
-    tabWebcam.classList.remove('active');
-    uploadSection.style.display = 'block';
-    webcamSection.style.display = 'none';
-    stopWebcam();
-});
-
-tabWebcam.addEventListener('click', () => {
-    tabWebcam.classList.add('active');
-    tabUpload.classList.remove('active');
-    webcamSection.style.display = 'block';
-    uploadSection.style.display = 'none';
-    resultArea.style.display = 'none';
-});
-
 // Load the image model
 async function initModel() {
     if (model) return;
@@ -66,7 +42,35 @@ async function initModel() {
 // Handle Image Upload
 imageInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
-    if (file) {
+    handleFile(file);
+});
+
+// Drag and Drop Logic
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, () => uploadArea.classList.add('highlight'), false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('highlight'), false);
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const file = dt.files[0];
+    handleFile(file);
+}, false);
+
+async function handleFile(file) {
+    if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = async (event) => {
             previewImage.src = event.target.result;
@@ -81,44 +85,9 @@ imageInput.addEventListener('change', (e) => {
         };
         reader.readAsDataURL(file);
     }
-});
-
-// Webcam Logic
-webcamStartBtn.addEventListener('click', async () => {
-    webcamStartBtn.style.display = 'none';
-    loading.style.display = 'block';
-    
-    await initModel();
-    
-    const flip = true;
-    webcam = new tmImage.Webcam(300, 300, flip);
-    await webcam.setup();
-    await webcam.play();
-    
-    loading.style.display = 'none';
-    resultArea.style.display = 'block';
-    webcamContainer.appendChild(webcam.canvas);
-    
-    animationId = window.requestAnimationFrame(webcamLoop);
-});
-
-async function webcamLoop() {
-    webcam.update();
-    await predict(webcam.canvas);
-    animationId = window.requestAnimationFrame(webcamLoop);
 }
 
-function stopWebcam() {
-    if (webcam) {
-        webcam.stop();
-        webcamContainer.innerHTML = '';
-        webcam = null;
-        if (animationId) window.cancelAnimationFrame(animationId);
-        webcamStartBtn.style.display = 'block';
-    }
-}
-
-// Predict Function (shared between upload and webcam)
+// Predict Function
 async function predict(inputElement) {
     const prediction = await model.predict(inputElement);
     labelContainer.innerHTML = '';
@@ -138,12 +107,14 @@ async function predict(inputElement) {
         barWrapper.innerHTML = `
             <div class="bar-label-text">${classPrediction}</div>
             <div class="bar-container">
-                <div class="bar ${classPrediction}-bar" style="width: ${probability}%"></div>
+                <div class="bar ${classPrediction}-bar" style="width: ${probability}%"</div>
                 <div class="bar-label">${probability}%</div>
             </div>
         `;
         labelContainer.appendChild(barWrapper);
     }
+    loading.style.display = 'none';
+    resultArea.style.display = 'block';
 }
 
 restartBtn.addEventListener('click', () => {

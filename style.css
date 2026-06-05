@@ -65,30 +65,6 @@ h1 { margin-bottom: 10px; font-size: 2rem; }
     transition: all 0.3s;
 }
 
-/* Tabs */
-.tab-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
-.tab-btn {
-    background: none;
-    border: 1px solid var(--input-border);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: all 0.3s;
-}
-
-.tab-btn.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    font-weight: bold;
-}
-
 /* Upload Area */
 .upload-area {
     border: 3px dashed var(--input-border);
@@ -100,9 +76,9 @@ h1 { margin-bottom: 10px; font-size: 2rem; }
     margin-bottom: 20px;
 }
 
-.upload-area:hover {
+.upload-area:hover, .upload-area.highlight {
     border-color: var(--primary-color);
-    background-color: rgba(255, 193, 7, 0.05);
+    background-color: rgba(255, 193, 7, 0.1);
 }
 
 .upload-label { cursor: pointer; display: block; }
@@ -114,19 +90,6 @@ h1 { margin-bottom: 10px; font-size: 2rem; }
     border-radius: 10px;
     display: none;
     margin: 0 auto;
-}
-
-/* Webcam */
-#webcam-container {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-#webcam-container canvas {
-    border-radius: 15px;
-    border: 3px solid var(--primary-color);
-    max-width: 100%;
 }
 
 /* Result Area */
@@ -159,7 +122,7 @@ h1 { margin-bottom: 10px; font-size: 2rem; }
 .Cat-bar { background-color: #e55c5c; color: white; }
 
 /* Buttons */
-#generate-btn, #submit-btn, #restart-btn, #webcam-start-btn {
+#generate-btn, #submit-btn, #restart-btn {
     background-color: var(--primary-color);
     color: #212529;
     padding: 12px 25px;
@@ -172,7 +135,7 @@ h1 { margin-bottom: 10px; font-size: 2rem; }
     font-weight: bold;
 }
 
-#generate-btn:hover, #submit-btn:hover, #restart-btn:hover, #webcam-start-btn:hover {
+#generate-btn:hover, #submit-btn:hover, #restart-btn:hover {
     background-color: var(--primary-hover);
     transform: translateY(-2px);
 }
